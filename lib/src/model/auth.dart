@@ -1,6 +1,7 @@
 import 'package:flutter_oss_aliyun/src/extension/date_extension.dart';
 import 'package:flutter_oss_aliyun/src/model/request.dart';
 import 'package:flutter_oss_aliyun/src/model/signed_parameters.dart';
+import 'package:flutter_oss_aliyun/src/util/date_time.dart';
 import 'package:flutter_oss_aliyun/src/util/encrypt.dart';
 
 class Auth {
@@ -25,7 +26,7 @@ class Auth {
     );
   }
 
-  bool get isExpired => DateTime.now().isAfter(DateTime.parse(expire));
+  bool get isExpired => ServiceDateTime.getServerTime().isAfter(DateTime.parse(expire));
 
   String get encodedToken => secureToken.replaceAll("+", "%2B");
 
@@ -34,7 +35,8 @@ class Auth {
   /// [bucket] is the name of bucket used in aliyun oss
   /// [key] is the object name in aliyun oss, alias the 'filepath/filename'
   void sign(HttpRequest req, String bucket, String key) {
-    req.headers['x-oss-date'] = DateTime.now().toGMTString();
+
+    req.headers['x-oss-date'] = ServiceDateTime.getServerTime().toGMTString();
     req.headers['x-oss-security-token'] = secureToken;
     final String signature = _makeSignature(req, bucket, key);
     req.headers['Authorization'] = "OSS $accessKey:$signature";

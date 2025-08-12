@@ -8,6 +8,7 @@ import 'package:flutter_oss_aliyun/src/extension/file_extension.dart';
 import 'package:flutter_oss_aliyun/src/model/callback.dart';
 import 'package:flutter_oss_aliyun/src/model/request.dart';
 import 'package:flutter_oss_aliyun/src/model/request_option.dart';
+import 'package:flutter_oss_aliyun/src/util/date_time.dart';
 
 import 'extension/option_extension.dart';
 import 'http_mixin.dart';
@@ -125,7 +126,7 @@ class Client with AuthMixin, HttpMixin implements ClientApi {
   }) async {
     final String bucket = bucketName ?? this.bucketName;
     final Auth auth = await getAuth();
-    final int expires = DateTime.now().secondsSinceEpoch() + expireSeconds;
+    final int expires = ServiceDateTime.getServerTime().secondsSinceEpoch() + expireSeconds;
 
     final String url = "https://$bucket.$endpoint/$fileKey";
     final Map<String, dynamic> parameters = {

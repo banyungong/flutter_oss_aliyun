@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter_oss_aliyun/src/util/date_time.dart';
+
 import 'model/auth.dart';
 
 mixin AuthMixin {
@@ -9,6 +11,7 @@ mixin AuthMixin {
 
   /// get auth information from sts server
   Future<Auth> getAuth() async {
+    await ServiceDateTime.initTimeDiff();
     if (isUnAuthenticated) {
       auth = await authGetter();
       return auth!;
