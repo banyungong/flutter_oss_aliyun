@@ -11,6 +11,12 @@ class ServiceDateTime {
     }
   }
 
+  static Future<void> resetTimeDiff() async {
+    DateTime ntpTime = await NTP.now();
+    DateTime localTime = DateTime.now().toUtc();
+    _diff = ntpTime.difference(localTime);
+  }
+
   /// 获取当前服务器时间（UTC），首次访问时与本地时间做差值，后续直接计算
   static DateTime getServerTime() {
     if (_diff == null) {
